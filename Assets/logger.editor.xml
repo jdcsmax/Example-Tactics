@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<log4net>
+    <appender name="UnityConsole" type="log4net.Unity.UnityDefaultLogAppender">
+        <layout type="log4net.Layout.PatternLayout">
+            <conversionPattern value="[%thread] %-5level %logger{1} -- %method: %message%newline"/>
+        </layout>
+    </appender>
+
+    <appender name="FileConsole" type="log4net.Appender.FileAppender">
+        <file value="${LogOutputPath}\${LogOutputName}.log" />
+        <appendToFile value="true" />
+        <layout type="log4net.Layout.PatternLayout">
+            <conversionPattern value="%d{yyyy-MM-dd HH:mm:ss.fff} [%thread] %-5level %logger{1} -- %method: %message%newline"/>
+        </layout>
+    </appender>
+    
+    <root>
+        <level value="DEBUG"/>
+        <appender-ref ref="UnityConsole"/>
+        <appender-ref ref="FileConsole"/>
+    </root>
+</log4net>

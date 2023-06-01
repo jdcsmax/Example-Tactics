@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5769e5d677e432b449599530001d3cd9, type: 3}
+  m_Name: Mercenary
+  m_EditorClassIdentifier: 
+  Message: "\u4F63\u5175"
+  HP: 18
+  Strength: 5
+  Magic: 0
+  Skill: 8
+  Speed: 7
+  Luck: 0
+  Defense: 5
+  Resistance: 0
+  Movement: 5
+  Flying: 0
+  Horseback: 0
+  Armored: 0
+  Magical: 0
+  Dragon: 0
+  Controls:
+  - {fileID: 11400000, guid: 67b78f731c8a81643807babcde76fcbc, type: 2}
+  Abilities: []

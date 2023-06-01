@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc3cab741e831a848ae2561041047fb0, type: 3}
+  m_Name: KnightLance
+  m_EditorClassIdentifier: 
+  Message: "\u91CD\u7532\u5175\u67AA\u64CD\u63A7"
+  Type: {fileID: 11400000, guid: f68d7ebf3120d9e4dbcab5c48bd6cbcd, type: 2}
+  Rank: E

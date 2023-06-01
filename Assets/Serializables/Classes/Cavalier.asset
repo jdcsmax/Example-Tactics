@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5769e5d677e432b449599530001d3cd9, type: 3}
+  m_Name: Cavalier
+  m_EditorClassIdentifier: 
+  Message: "\u8F7B\u9A91\u5175"
+  HP: 18
+  Strength: 6
+  Magic: 0
+  Skill: 5
+  Speed: 6
+  Luck: 0
+  Defense: 7
+  Resistance: 0
+  Movement: 7
+  Flying: 0
+  Horseback: 1
+  Armored: 0
+  Magical: 0
+  Dragon: 0
+  Controls:
+  - {fileID: 11400000, guid: aedbc6f12bc63934d897f9f5024af6ea, type: 2}
+  - {fileID: 11400000, guid: 7ef81294c2f88f44a8c1e5d8530ef58e, type: 2}
+  Abilities: []

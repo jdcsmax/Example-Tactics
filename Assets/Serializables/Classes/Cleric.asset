@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5769e5d677e432b449599530001d3cd9, type: 3}
+  m_Name: Cleric
+  m_EditorClassIdentifier: 
+  Message: "\u4FEE\u5973"
+  HP: 16
+  Strength: 0
+  Magic: 3
+  Skill: 2
+  Speed: 4
+  Luck: 0
+  Defense: 1
+  Resistance: 6
+  Movement: 5
+  Flying: 0
+  Horseback: 0
+  Armored: 0
+  Magical: 1
+  Dragon: 0
+  Controls:
+  - {fileID: 11400000, guid: 8d2888e6f0c52d54ea49c6deb6c93e6a, type: 2}
+  Abilities: []
