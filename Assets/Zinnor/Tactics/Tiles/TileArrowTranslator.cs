@@ -2,7 +2,7 @@
 
 namespace Zinnor.Tactics.Tiles
 {
-    public sealed class TileArrowTranslator
+    public static class TileArrowTranslator
     {
         public static TileArrowDirection Direction(TileOverlay previousTile, TileOverlay currentTile,
             TileOverlay futureTile)
@@ -10,10 +10,10 @@ namespace Zinnor.Tactics.Tiles
             bool isFinal = futureTile == null;
 
             Vector2Int pastDirection = previousTile != null
-                ? currentTile.Grid2DLocation - previousTile.Grid2DLocation
+                ? currentTile.Location2D - previousTile.Location2D
                 : new Vector2Int(0, 0);
             Vector2Int futureDirection = futureTile != null
-                ? futureTile.Grid2DLocation - currentTile.Grid2DLocation
+                ? futureTile.Location2D - currentTile.Location2D
                 : new Vector2Int(0, 0);
             Vector2Int direction = pastDirection != futureDirection
                 ? pastDirection + futureDirection

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using CollisionBear.PreviewObjectPicker;
 using UnityEngine;
-using Zinnor.Tactics.Scriptables;
+using Zinnor.Tactics.Scriptables.Effects;
 using Zinnor.Tactics.Scriptables.Weapons;
 
-namespace Zinnor.Tactics.Units
+namespace Zinnor.Tactics.Scriptables.Classes
 {
     /**
      * 职业
@@ -11,14 +12,14 @@ namespace Zinnor.Tactics.Units
     [CreateAssetMenu(fileName = "ScriptableClass", menuName = "ScriptableObjects/ScriptableClass")]
     public class ScriptableClass : ScriptableObject
     {
-        /**
-         * 描述
-         */
+        /// <summary>
+        /// 描述
+        /// </summary>
         public string Message;
 
-        /**
-         * 生命
-         */
+        /// <summary>
+        /// 生命
+        /// </summary>
         public int HP;
 
         /**

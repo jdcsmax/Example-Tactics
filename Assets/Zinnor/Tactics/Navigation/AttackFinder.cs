@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Zinnor.Tactics.Navigation;
 using Zinnor.Tactics.Tiles;
 using Zinnor.Tactics.Units;
 
-namespace Assets.Zinnor.Tactics.Navigation
+namespace Zinnor.Tactics.Navigation
 {
     public static class AttackFinder
     {
@@ -29,34 +26,48 @@ namespace Assets.Zinnor.Tactics.Navigation
                 {
                     for (var y = -unit.MaxAttackDistance; y <= unit.MaxAttackDistance; ++y)
                     {
-                        var pos = new Vector2Int(x + tile.GridX, y + tile.GridY);
+                        var location = new Vector2Int(x + tile.X, y + tile.Y);
 
-                        var n = NavUtils.GetManhattenDistance(pos, tile.Grid2DLocation);
-
-                        if (n < unit.MinAttackDistance || n > unit.MaxAttackDistance)
+                        if (Attackable(location, tile, unit, movableTiles, attackableTiles))
                         {
-                            continue;
-                        }
-
-                        if (attackableTiles.ContainsKey(pos))
-                        {
-                            continue;
-                        }
-
-                        if (movableTiles.ContainsKey(pos))
-                        {
-                            continue;
-                        }
-
-                        if (searchableTiles.TryGetValue(pos, out var attackable))
-                        {
-                            attackableTiles.Add(pos, attackable);
+                            if (searchableTiles.TryGetValue(location, out var attackable))
+                            {
+                                if (attackable.Traverable)
+                                {
+                                    attackableTiles.Add(location, attackable);
+                                }
+                            }
                         }
                     }
                 }
             }
 
             return attackableTiles;
+        }
+
+        private static bool Attackable(
+            Vector2Int location, TileOverlay tile, Unit unit,
+            Dictionary<Vector2Int, TileOverlay> movableTiles,
+            Dictionary<Vector2Int, TileOverlay> attackableTiles)
+        {
+            var n = NavUtils.GetManhattenDistance(location, tile.Location2D);
+
+            if (n < unit.MinAttackDistance || n > unit.MaxAttackDistance)
+            {
+                return false;
+            }
+
+            if (movableTiles.ContainsKey(location))
+            {
+                return false;
+            }
+
+            if (attackableTiles.ContainsKey(location))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

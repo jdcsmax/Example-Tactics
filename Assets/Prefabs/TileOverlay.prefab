@@ -116,7 +116,7 @@ Transform:
   m_Children:
   - {fileID: 1000308657805939807}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6657912321402926563
 SpriteRenderer:
@@ -182,14 +182,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ebe240bf5119dc4c99997dc05cadc52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  W: 0
   C: 0
+  Visited: 0
   G: 0
   H: 0
-  Data: {fileID: 0}
   Previous: {fileID: 0}
-  Grid3DLocation: {x: 0, y: 0, z: 0}
-  _tileSpriteRenderer: {fileID: 6657912321402926563}
-  _arrowSpriteRenderer: {fileID: 8118317382974294480}
+  Location3D: {x: 0, y: 0, z: 0}
+  TileSpriteRenderer: {fileID: 6657912321402926563}
+  ArrowSpriteRenderer: {fileID: 8118317382974294480}
   ArrowSprites:
   - {fileID: 0}
   - {fileID: 547019042, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
@@ -207,4 +208,5 @@ MonoBehaviour:
   HealSprite: {fileID: 1222292584, guid: 013f7ea653bbaf146b3b5889dcc23110, type: 3}
   AttackSprite: {fileID: 1954870877, guid: 013f7ea653bbaf146b3b5889dcc23110, type: 3}
   MoveSprite: {fileID: 1593524804, guid: 013f7ea653bbaf146b3b5889dcc23110, type: 3}
-  Unit: {fileID: 0}
+  OverlayData: {fileID: 0}
+  Holder: {fileID: 0}

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Zinnor.Tactics.Scriptables.Weapons
+namespace Zinnor.Tactics.Scriptables.Elements
 {
     /**
      * 元素

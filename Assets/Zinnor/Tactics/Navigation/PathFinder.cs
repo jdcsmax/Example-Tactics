@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Zinnor.Tactics.Navigation;
 using Zinnor.Tactics.Tiles;
 using Zinnor.Tactics.Units;
 
-namespace Assets.Zinnor.Tactics.Navigation
+namespace Zinnor.Tactics.Navigation
 {
     public static class PathFinder
     {
@@ -109,7 +108,7 @@ namespace Assets.Zinnor.Tactics.Navigation
                     {
                         continue;
                     }
-                    
+
                     if (neighbor.C == int.MaxValue || current.C + neighbor.W < neighbor.C)
                     {
                         neighbor.C = current.C + neighbor.W;

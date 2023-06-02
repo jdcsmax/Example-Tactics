@@ -21,16 +21,16 @@ namespace Zinnor.Tactics.Navigation
             }
 
             // Top
-            GetNeighbor(Top(current.Grid3DLocation), unit, current, searchableTiles, neighborTiles);
+            GetNeighbor(Top(current.Location3D), unit, current, searchableTiles, neighborTiles);
 
             // Bottom
-            GetNeighbor(Bottom(current.Grid3DLocation), unit, current, searchableTiles, neighborTiles);
+            GetNeighbor(Bottom(current.Location3D), unit, current, searchableTiles, neighborTiles);
 
             // Right
-            GetNeighbor(Right(current.Grid3DLocation), unit, current, searchableTiles, neighborTiles);
+            GetNeighbor(Right(current.Location3D), unit, current, searchableTiles, neighborTiles);
 
             // Left
-            GetNeighbor(Left(current.Grid3DLocation), unit, current, searchableTiles, neighborTiles);
+            GetNeighbor(Left(current.Location3D), unit, current, searchableTiles, neighborTiles);
         }
 
         public static void GetNeighbor(Vector2Int location, Unit unit, TileOverlay current,
@@ -40,7 +40,7 @@ namespace Zinnor.Tactics.Navigation
             {
                 if (unit.Traverable(tile))
                 {
-                    if (Mathf.Abs(current.GridZ - tile.GridZ) <= 1)
+                    if (Mathf.Abs(current.Z - tile.Z) <= 1)
                     {
                         neighborTiles.Add(tile);
                     }
@@ -60,16 +60,16 @@ namespace Zinnor.Tactics.Navigation
             }
 
             // Top
-            GetNeighbor(Top(current.Grid3DLocation), searchableTiles, neighborTiles);
+            GetNeighbor(Top(current.Location3D), searchableTiles, neighborTiles);
 
             // Bottom
-            GetNeighbor(Bottom(current.Grid3DLocation), searchableTiles, neighborTiles);
+            GetNeighbor(Bottom(current.Location3D), searchableTiles, neighborTiles);
 
             // Right
-            GetNeighbor(Right(current.Grid3DLocation), searchableTiles, neighborTiles);
+            GetNeighbor(Right(current.Location3D), searchableTiles, neighborTiles);
 
             // Left
-            GetNeighbor(Left(current.Grid3DLocation), searchableTiles, neighborTiles);
+            GetNeighbor(Left(current.Location3D), searchableTiles, neighborTiles);
         }
 
         public static void GetNeighbor(Vector2Int location,
@@ -87,8 +87,8 @@ namespace Zinnor.Tactics.Navigation
          */
         public static int GetManhattenDistance(TileOverlay tile, TileOverlay neighbor)
         {
-            return Mathf.Abs(tile.Grid3DLocation.x - neighbor.Grid3DLocation.x) +
-                   Mathf.Abs(tile.Grid3DLocation.y - neighbor.Grid3DLocation.y);
+            return Mathf.Abs(tile.Location3D.x - neighbor.Location3D.x) +
+                   Mathf.Abs(tile.Location3D.y - neighbor.Location3D.y);
         }
 
         public static int GetManhattenDistance(Vector3Int position, Vector3Int neighbor)

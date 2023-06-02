@@ -26,10 +26,10 @@ namespace Zinnor.Tactics.Navigation
         public static bool IsOutside(TileOverlay tile,
             Func<Vector2Int, bool> movable, Func<Vector2Int, bool> searchable)
         {
-            return IsOutside(NavUtils.Top(tile.Grid3DLocation), movable, searchable) ||
-                   IsOutside(NavUtils.Bottom(tile.Grid3DLocation), movable, searchable) ||
-                   IsOutside(NavUtils.Right(tile.Grid3DLocation), movable, searchable) ||
-                   IsOutside(NavUtils.Left(tile.Grid3DLocation), movable, searchable);
+            return IsOutside(NavUtils.Top(tile.Location3D), movable, searchable) ||
+                   IsOutside(NavUtils.Bottom(tile.Location3D), movable, searchable) ||
+                   IsOutside(NavUtils.Right(tile.Location3D), movable, searchable) ||
+                   IsOutside(NavUtils.Left(tile.Location3D), movable, searchable);
         }
 
         private static bool IsOutside(Vector2Int position,

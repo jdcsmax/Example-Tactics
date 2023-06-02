@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using Assets.Zinnor.Tactics.Navigation;
-using UnityEngine;
+﻿using UnityEngine;
 using Zinnor.Tactics.Units;
 
-namespace Zinnors.Tactics.Controllers
+namespace Zinnor.Tactics.Controllers
 {
     public class TileMovementController : MonoBehaviour
     {

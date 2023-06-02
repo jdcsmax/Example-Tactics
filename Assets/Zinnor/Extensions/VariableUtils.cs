@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Zinnor.Extentions
+namespace Zinnor.Extensions
 {
-    public class VariableUtils
+    public static class VariableUtils
     {
         public static bool HasEnvironmentVariable(string variable)
         {

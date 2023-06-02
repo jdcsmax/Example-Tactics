@@ -8,21 +8,15 @@ using log4net.Config;
 using log4net.Unity.Config;
 using UnityEngine;
 
-namespace Zinnor.Extentions
+namespace Zinnor.Extensions
 {
     public class Log4netConfigurator : IConfigurator
     {
-        public static readonly string LogDirectoryName = "Logs";
-        public static readonly string LogPathVariableName = "LogOutputPath";
-        public static readonly string LogNameVariableName = "LogOutputName";
-
-        public static readonly Log4netConfigurator Instance = new Log4netConfigurator();
+        private const string LogDirectoryName = "Logs";
+        private const string LogPathVariableName = "LogOutputPath";
+        private const string LogNameVariableName = "LogOutputName";
 
         private string[] _filePaths;
-
-        public Log4netConfigurator()
-        {
-        }
 
         public int Order => int.MaxValue - 100;
 
@@ -47,7 +41,7 @@ namespace Zinnor.Extentions
             XmlConfigurator.Configure(document.DocumentElement);
         }
 
-        protected XmlDocument Document
+        private XmlDocument Document
         {
             get
             {

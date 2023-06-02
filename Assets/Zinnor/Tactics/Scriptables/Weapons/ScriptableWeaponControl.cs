@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Zinnor.Tactics.Scriptables.Elements;
 
 namespace Zinnor.Tactics.Scriptables.Weapons
 {

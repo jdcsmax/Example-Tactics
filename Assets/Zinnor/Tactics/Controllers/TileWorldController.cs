@@ -1,131 +1,160 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Zinnor.Tactics.Navigation;
+using Cysharp.Threading.Tasks;
+using log4net;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Zinnor.Tactics.Navigation;
+using Zinnor.Tactics.Scriptables.Abilities;
 using Zinnor.Tactics.Scriptables.Weapons;
 using Zinnor.Tactics.Tiles;
 using Zinnor.Tactics.Units;
+using Random = UnityEngine.Random;
 
-namespace Zinnors.Tactics.Controllers
+namespace Zinnor.Tactics.Controllers
 {
     public class TileWorldController : MonoBehaviour
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(TileWorldController));
+
         public TileOverlay TileOverlayPrefab;
         public GameObject TileOverlayContainer;
-        public ScriptableTileSet ScriptableTileSet;
+        public TileOverlayDataSet tileOverlayDataSet;
         public Tilemap TileMask;
         public Tilemap TileGround;
-        public BoundsInt TileBounds;
-        public Dictionary<TileBase, ScriptableTile> TileDataMap;
-        public Dictionary<Vector2Int, TileOverlay> TileOverlayMap;
+        public TileBounds TileBounds;
+
+        private readonly Dictionary<Vector2Int, TileOverlay> TileOverlayMap = new();
+        private readonly Dictionary<TileBase, TileOverlayData> TileOverlayDataMap = new();
 
         public Unit ActiveUnit;
 
-        public Unit UnitPrefab;
         public GameObject UnitContainer;
-        public ScriptableClass UnitClass;
+        public Unit UnitPrefab;
         public ScriptableWeapon UnitWeapon;
 
         public void Awake()
         {
-            PreBuildMap();
             DoBuildMap();
-            PostBuildMap();
         }
 
         public void Start()
         {
-            ClearTiles();
-
-            TestMovementSquares();
+            TestMovementSquares().Forget();
         }
 
-        private Unit CreateUnit(ScriptableClass clazz, Stats stats, ScriptableWeapon weapon)
+        private async UniTask TestMovementSquares()
         {
-            var unit = Instantiate(UnitPrefab, UnitContainer.transform);
+            var location = new Vector2Int(-10, -8);
+            var extra = new Stats();
+            var tile = TileOverlayMap[location];
+            ActiveUnit = Unit.newBuilder()
+                .SetId(1)
+                .SetPrefab(UnitPrefab)
+                .SetParent(UnitContainer)
+                .SetWeapon(UnitWeapon)
+                .SetExtra(extra)
+                .SetTile(tile)
+                .SetSortingOrder(1)
+                .Build();
 
-            unit.Class = clazz;
-            unit.Stats = stats;
-            unit.Weapon = weapon;
+            var movableTiles = MoveFinder.Find(ActiveUnit, tile, TileOverlayMap);
+            TileOverlayUtils.ShowMoveSquares(ActiveUnit, tile, movableTiles.Values.ToList());
 
-            unit.HP = unit.MaxHP;
-
-            return unit;
-        }
-
-        private void TestMovementSquares()
-        {
-            var unit = CreateUnit(UnitClass, new Stats(), UnitWeapon);
-            var location = new Vector2Int(-10, -10);
-            var start = TileOverlayMap[location];
-
-            var movableTiles = MoveFinder.Find(unit, start, TileOverlayMap);
-            TileOverlayUtils.ShowMoveSquares(unit, start, movableTiles.Values.ToList());
-
-            var attackableTiles = AttackFinder.Find(unit, start, movableTiles, TileOverlayMap);
-            TileOverlayUtils.ShowAttackSquares(unit, attackableTiles.Values.ToList());
+            var attackableTiles = AttackFinder.Find(ActiveUnit, tile, movableTiles, TileOverlayMap);
+            TileOverlayUtils.ShowAttackSquares(ActiveUnit, attackableTiles.Values.ToList());
 
             var boundsTiles = BoundsFinder.Find(movableTiles.Values,
                 p => movableTiles.ContainsKey(p),
                 p => TileOverlayMap.ContainsKey(p));
 
-            if (boundsTiles.Count > 0)
+            if (boundsTiles.Count != 0)
             {
-                var end = boundsTiles[UnityEngine.Random.Range(0, boundsTiles.Count)];
-                var pathTiles = PathFinder.AStarSearch(unit, start, end, movableTiles);
-                TileOverlayUtils.ShowMoveArrows(unit, start, pathTiles);
-            }
-        }
-
-        protected void PreBuildMap()
-        {
-            TileDataMap = new Dictionary<TileBase, ScriptableTile>();
-            TileOverlayMap = new Dictionary<Vector2Int, TileOverlay>();
-
-            foreach (var data in ScriptableTileSet)
-            {
-                TileDataMap.Add(data.Tile, data);
+                var end = boundsTiles[Random.Range(0, boundsTiles.Count)];
+                var pathTiles = PathFinder.AStarSearch(ActiveUnit, tile, end, movableTiles);
+                TileOverlayUtils.ShowMoveArrows(ActiveUnit, tile, pathTiles);
             }
 
-            TileBounds = TileMask.cellBounds;
-        }
-
-        protected void DoBuildMap()
-        {
-            var sortingOrder = TileGround.GetComponent<TilemapRenderer>().sortingOrder;
-
-            for (int z = TileBounds.max.z; z >= TileBounds.min.z; z--)
+            for (int i = 0; i < 2; ++i)
             {
-                for (int y = TileBounds.min.y; y < TileBounds.max.y; y++)
+                ActiveUnit.Faction = i;
+                ActiveUnit.AfterControllerChanged();
+                
+                foreach (UnitStates state in Enum.GetValues(typeof(UnitStates)))
                 {
-                    for (int x = TileBounds.min.x; x < TileBounds.max.x; x++)
-                    {
-                        var tileLocation3D = new Vector3Int(x, y, z);
-                        var tileLocation2D = new Vector2Int(x, y);
-
-                        if (TileMask.HasTile(tileLocation3D) && !TileOverlayMap.ContainsKey(tileLocation2D))
-                        {
-                            var tile = TileMask.GetTile(tileLocation3D);
-                            var tileOverlay = Instantiate(TileOverlayPrefab, TileOverlayContainer.transform);
-                            var cellWorldPosition = TileMask.GetCellCenterWorld(tileLocation3D);
-                            tileOverlay.transform.position = new Vector3(
-                                cellWorldPosition.x, cellWorldPosition.y, cellWorldPosition.z + 1);
-                            tileOverlay.TileSpriteRenderer.sortingOrder = sortingOrder;
-                            tileOverlay.Grid3DLocation = tileLocation3D;
-
-                            TileDataMap.TryGetValue(tile, out tileOverlay.Data);
-
-                            TileOverlayMap.Add(tileLocation2D, tileOverlay);
-                        }
-                    }
+                    await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale:false);
+                    ActiveUnit.State = state;
+                    ActiveUnit.AfterStateChanged();
                 }
             }
         }
 
-        protected void PostBuildMap()
+        private void DoBuildMap()
+        {
+            Logger.Info("Starting build map ...");
+
+            foreach (var data in tileOverlayDataSet)
+            {
+                TileOverlayDataMap.Add(data.Tile, data);
+            }
+
+            var cellBounds = TileMask.cellBounds;
+            var sortingOrder = TileGround.GetComponent<TilemapRenderer>().sortingOrder;
+            TileBounds = new TileBounds(cellBounds.min.x, cellBounds.min.y,
+                cellBounds.max.x, cellBounds.max.y);
+
+            for (var z = cellBounds.max.z; z >= cellBounds.min.z; z--)
+            {
+                for (var y = cellBounds.min.y; y < cellBounds.max.y; y++)
+                {
+                    for (var x = cellBounds.min.x; x < cellBounds.max.x; x++)
+                    {
+                        var tileLocation = new Vector3Int(x, y, z);
+
+                        if (!TileMask.HasTile(tileLocation))
+                        {
+                            continue;
+                        }
+
+                        if (TileOverlayMap.ContainsKey(new Vector2Int(tileLocation.x, tileLocation.y)))
+                        {
+                            continue;
+                        }
+
+                        var tile = TileMask.GetTile(tileLocation);
+                        var worldPosition = TileMask.GetCellCenterWorld(tileLocation);
+                        var tileOverlay = TileOverlay.NewBuilder()
+                            .SetTilePrefab(TileOverlayPrefab)
+                            .SetTileContainer(TileOverlayContainer)
+                            .SetTileLocation(tileLocation)
+                            .SetWorldPosition(worldPosition)
+                            .SetSortingOrder(sortingOrder)
+                            .Build();
+
+                        RegisterTileStub(tileLocation, tile, tileOverlay);
+                    }
+                }
+            }
+
+            HideTileMask();
+
+            Logger.Info("Starting build map ... [OK]");
+        }
+
+        private void RegisterTileStub(Vector3Int tileLocation, TileBase tile, TileOverlay tileOverlay)
+        {
+            TileOverlayMap.Add(new Vector2Int(tileLocation.x, tileLocation.y), tileOverlay);
+            TileOverlayDataMap.TryGetValue(tile, out tileOverlay.OverlayData);
+
+            if (tileOverlay.OverlayData == null)
+            {
+                Logger.ErrorFormat("position:({0},{1},{2}) stub not found. tile:{3}",
+                    tileLocation.x, tileLocation.y, tileLocation.x, tile.name);
+            }
+        }
+
+        private void HideTileMask()
         {
             TileMask.gameObject.SetActive(false);
         }

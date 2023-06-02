@@ -7,129 +7,139 @@ namespace Zinnor.Tactics.Tiles
 {
     public class TileOverlay : MonoBehaviour
     {
-        /**
-         * »º´æ Dijkstra Ëã·¨ÖĞ g º¯Êı¼ÆËã½á¹û
-         */
+        /// <summary>
+        /// ç¼“å­˜ Dijkstra ç®—æ³•ä¸­ g å‡½æ•°è®¡ç®—ç»“æœ
+        /// </summary>
         public int W;
 
-        /**
-         * »º´æ Dijkstra Ëã·¨ÖĞ f º¯Êı¼ÆËã½á¹û
-         */
+        /// <summary>
+        /// ç¼“å­˜ Dijkstra ç®—æ³•ä¸­ f å‡½æ•°è®¡ç®—ç»“æœ
+        /// </summary>
         public int C;
 
-        /**
-         * ±ê¼Ç Dijkstra Ëã·¨ÖĞÊÇ·ñÒÔ·ÃÎÊ
-         */
+        /// <summary>
+        /// æ ‡è®° Dijkstra ç®—æ³•ä¸­æ˜¯å¦ä»¥è®¿é—®
+        /// </summary>
         public bool Visited;
 
-        /**
-         * »º´æ A* Ëã·¨ÖĞ g º¯Êı¼ÆËã½á¹û
-         */
+        /// <summary>
+        /// ç¼“å­˜ A* ç®—æ³•ä¸­ g å‡½æ•°è®¡ç®—ç»“æœ
+        /// </summary>
         public int G;
 
-        /**
-         * »º´æ A* Ëã·¨ÖĞ h º¯Êı¼ÆËã½á¹û
-         */
+        /// <summary>
+        /// ç¼“å­˜ A* ç®—æ³•ä¸­ h å‡½æ•°è®¡ç®—ç»“æœ
+        /// </summary>
         public int H;
 
-        /**
-         * ·µ»Ø A* Ëã·¨ÖĞ f º¯Êı¼ÆËã½á¹û
-         */
+        /// <summary>
+        /// è¿”å› A* ç®—æ³•ä¸­ f å‡½æ•°è®¡ç®—ç»“æœ
+        /// </summary>
         public int F => G + H;
 
-        public ScriptableTile Data;
+        /// <summary>
+        /// å¯¹è·¯å¾„æœç´¢ä¸­å‰ä¸€ä¸ªæ ¼å­çš„å¼•ç”¨
+        /// </summary>
         public TileOverlay Previous;
 
-        public Vector3Int Grid3DLocation;
+        /// <summary>
+        /// ç¼“å­˜æ ¼å­åœ¨ Tilemap ä¸­ä¸‰ç»´åæ ‡
+        /// </summary>
+        public Vector3Int Location3D;
 
-        public int GridX => Grid3DLocation.x;
-        public int GridY => Grid3DLocation.y;
-        public int GridZ => Grid3DLocation.z;
+        public int X => Location3D.x;
+        public int Y => Location3D.y;
+        public int Z => Location3D.z;
 
-        public Vector2Int Grid2DLocation => new Vector2Int(Grid3DLocation.x, Grid3DLocation.y);
+        /// <summary>
+        /// è¿”å›æ ¼å­åœ¨ Tilemap ä¸­äºŒç»´åæ ‡
+        /// </summary>
+        public Vector2Int Location2D => new Vector2Int(Location3D.x, Location3D.y);
 
-        [SerializeField] private SpriteRenderer _tileSpriteRenderer;
-        [SerializeField] private SpriteRenderer _arrowSpriteRenderer;
+        public SpriteRenderer TileSpriteRenderer;
+        public SpriteRenderer ArrowSpriteRenderer;
 
         /**
-         * Ö¸Õë¾«Áé
+         * è·¯å¾„æŒ‡é’ˆ
          */
         public List<Sprite> ArrowSprites;
 
         /**
-         * ÖÎÁÆ¾«Áé
+         * æ²»ç–—æ ¼å­
          */
         public Sprite HealSprite;
 
-        /**
-         * ¹¥»÷¾«Áé
-         */
+        /// <summary>
+        /// æ”»å‡»æ ¼å­
+        /// </summary>
         public Sprite AttackSprite;
 
         /**
-         * ÒÆ¶¯¾«Áé
+         * ç§»åŠ¨æ ¼å­
          */
         public Sprite MoveSprite;
 
-        public SpriteRenderer TileSpriteRenderer
-        {
-            get
-            {
-                if (_tileSpriteRenderer == null)
-                {
-                    _tileSpriteRenderer = GetComponent<SpriteRenderer>();
-                }
+        /// <summary>
+        /// æ•°æ®é…ç½®
+        /// </summary>
+        public TileOverlayData OverlayData;
 
-                return _tileSpriteRenderer;
-            }
-        }
+        /// <summary>
+        /// å¯å¦æ­¥è¡Œé€šè¿‡
+        /// </summary>
+        public bool Walkable => OverlayData.Walkable;
 
-        public SpriteRenderer ArrowSpriteRenderer
-        {
-            get
-            {
-                if (_arrowSpriteRenderer == null)
-                {
-                    _arrowSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
-                }
+        /// <summary>
+        /// å¯å¦é£è¡Œé€šè¿‡
+        /// </summary>
+        public bool Flyable => OverlayData.Flyable;
 
-                return _arrowSpriteRenderer;
-            }
-        }
+        /// <summary>
+        /// å¯å¦é€šè¿‡
+        /// </summary>
+        public bool Traverable => OverlayData.Traverable;
 
-        // Õ¼¾İ Tile µÄ Unit
-        public Unit Unit;
+        /// <summary>
+        /// å æ®æ ¼å­çš„ Unit
+        /// </summary>
+        public Unit Holder;
 
-        /**
-         * ÏÔÊ¾ÖÎÁÆ¸²¸Ç¾«Áé
-         */
+        /// <summary>
+        /// æ˜¾ç¤ºæ²»ç–—è¦†ç›–ç²¾çµ
+        /// </summary>
         public void ShowHealSprite()
         {
             ShowOverlaySprite(HealSprite);
         }
 
-        /**
-         * ÏÔÊ¾¹¥»÷¸²¸Ç¾«Áé
-         */
+        /// <summary>
+        /// æ˜¾ç¤ºæ”»å‡»è¦†ç›–ç²¾çµ
+        /// </summary>
         public void ShowAttackSprite()
         {
             ShowOverlaySprite(AttackSprite);
         }
 
-        /**
-         * ÏÔÊ¾ÒÆ¶¯¸²¸Ç¾«Áé
-         */
+        /// <summary>
+        /// æ˜¾ç¤ºç§»åŠ¨è¦†ç›–ç²¾çµ
+        /// </summary>
         public void ShowMoveSprite()
         {
             ShowOverlaySprite(MoveSprite);
         }
 
-        private void ShowOverlaySprite(Sprite sprite)
+        /// <summary>
+        /// æ˜¾ç¤ºæ ¼å­è¦†ç›–ç²¾çµ
+        /// </summary>
+        public void ShowOverlaySprite(Sprite sprite)
         {
             TileSpriteRenderer.sprite = sprite;
             TileSpriteRenderer.color = Colors.Square;
         }
 
+        /// <summary>
+        /// éšè—æ ¼å­è¦†ç›–ç²¾çµ
+        /// </summary>
         public void HideOverlaySprite()
         {
             TileSpriteRenderer.color = Colors.Transparent;
@@ -137,6 +147,9 @@ namespace Zinnor.Tactics.Tiles
             ShowArrowSprite(TileArrowDirection.None);
         }
 
+        /// <summary>
+        /// æ˜¾ç¤ºæŒ‡é’ˆç²¾çµ
+        /// </summary>
         public void ShowArrowSprite(TileArrowDirection direction)
         {
             ArrowSpriteRenderer.sortingOrder = 1;
@@ -149,6 +162,60 @@ namespace Zinnor.Tactics.Tiles
             {
                 ArrowSpriteRenderer.color = Colors.Opaque;
                 ArrowSpriteRenderer.sprite = ArrowSprites[(int)direction];
+            }
+        }
+
+        public static Builder NewBuilder()
+        {
+            return new Builder();
+        }
+
+        public sealed class Builder
+        {
+            private TileOverlay _tilePrefab;
+            private GameObject _tileContainer;
+            private Vector3Int _tileLocation;
+            private Vector3 _worldPosition;
+            private int _sortingOrder;
+
+            public Builder SetTilePrefab(TileOverlay tileOverlay)
+            {
+                _tilePrefab = tileOverlay;
+                return this;
+            }
+
+            public Builder SetTileContainer(GameObject tileContainer)
+            {
+                _tileContainer = tileContainer;
+                return this;
+            }
+
+            public Builder SetTileLocation(Vector3Int tileLocation)
+            {
+                _tileLocation = tileLocation;
+                return this;
+            }
+
+            public Builder SetWorldPosition(Vector3 worldPosition)
+            {
+                _worldPosition = worldPosition;
+                return this;
+            }
+
+            public Builder SetSortingOrder(int sortingOrder)
+            {
+                _sortingOrder = sortingOrder;
+                return this;
+            }
+
+            public TileOverlay Build()
+            {
+                var tileOverlay = Instantiate(_tilePrefab, _tileContainer.transform);
+                tileOverlay.Location3D = _tileLocation;
+                tileOverlay.transform.position = new Vector3(
+                    _worldPosition.x, _worldPosition.y, _worldPosition.z + 1);
+                tileOverlay.TileSpriteRenderer.sortingOrder = _sortingOrder;
+                return tileOverlay;
             }
         }
     }

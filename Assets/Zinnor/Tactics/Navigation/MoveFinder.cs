@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using Zinnor.Tactics.Navigation;
 using Zinnor.Tactics.Tiles;
 using Zinnor.Tactics.Units;
 
-namespace Assets.Zinnor.Tactics.Navigation
+namespace Zinnor.Tactics.Navigation
 {
     public static class MoveFinder
     {
@@ -18,7 +16,7 @@ namespace Assets.Zinnor.Tactics.Navigation
             var tiles = new HashSet<TileOverlay>();
             var neighborTiles = new List<TileOverlay>();
             var rangeTiles = new Dictionary<Vector2Int, TileOverlay>();
-            var moveableTiles = new Dictionary<Vector2Int, TileOverlay>();
+            var movableTiles = new Dictionary<Vector2Int, TileOverlay>();
             int distance = 0;
 
             tiles.Add(start);
@@ -45,7 +43,7 @@ namespace Assets.Zinnor.Tactics.Navigation
 
             foreach (var tile in tiles)
             {
-                rangeTiles.Add(tile.Grid2DLocation, tile);
+                rangeTiles.Add(tile.Location2D, tile);
             }
 
             foreach (var tile in rangeTiles)
@@ -56,11 +54,11 @@ namespace Assets.Zinnor.Tactics.Navigation
 
                 if (unit.Mov >= cost)
                 {
-                    moveableTiles.Add(tile.Value.Grid2DLocation, tile.Value);
+                    movableTiles.Add(tile.Value.Location2D, tile.Value);
                 }
             }
 
-            return moveableTiles;
+            return movableTiles;
         }
     }
 }

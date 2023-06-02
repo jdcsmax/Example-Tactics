@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zinnor.Tactics.Tiles;
 
-namespace Zinnors.Tactics.Controllers
+namespace Zinnor.Tactics.Controllers
 {
     public class TileOverlayController : MonoBehaviour
     {
