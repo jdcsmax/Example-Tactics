@@ -33,23 +33,27 @@ namespace Zinnor.Tactics.Navigation
             GetNeighbor(Left(current.Location3D), unit, current, searchableTiles, neighborTiles);
         }
 
-        public static void GetNeighbor(Vector2Int location, Unit unit, TileOverlay current,
-            Dictionary<Vector2Int, TileOverlay> searchableTiles, List<TileOverlay> neighborTiles)
+        private static void GetNeighbor(Vector2Int location, Unit unit, TileOverlay current,
+            IReadOnlyDictionary<Vector2Int, TileOverlay> searchableTiles, ICollection<TileOverlay> neighborTiles)
         {
-            if (searchableTiles.TryGetValue(location, out TileOverlay tile))
+            if (!searchableTiles.TryGetValue(location, out var tile))
             {
-                if (unit.Traverable(tile))
-                {
-                    if (Mathf.Abs(current.Z - tile.Z) <= 1)
-                    {
-                        neighborTiles.Add(tile);
-                    }
-                }
+                return;
+            }
+
+            if (!unit.Traverable(tile))
+            {
+                return;
+            }
+
+            if (Mathf.Abs(current.Z - tile.Z) <= 1)
+            {
+                neighborTiles.Add(tile);
             }
         }
 
         public static void GetNeighbors(TileOverlay current,
-            Dictionary<Vector2Int, TileOverlay> searchableTiles,
+            IReadOnlyDictionary<Vector2Int, TileOverlay> searchableTiles,
             List<TileOverlay> neighborTiles)
         {
             neighborTiles.Clear();
@@ -72,19 +76,19 @@ namespace Zinnor.Tactics.Navigation
             GetNeighbor(Left(current.Location3D), searchableTiles, neighborTiles);
         }
 
-        public static void GetNeighbor(Vector2Int location,
-            Dictionary<Vector2Int, TileOverlay> searchableTiles,
-            List<TileOverlay> neighborTiles)
+        private static void GetNeighbor(Vector2Int location,
+            IReadOnlyDictionary<Vector2Int, TileOverlay> searchableTiles,
+            ICollection<TileOverlay> neighborTiles)
         {
-            if (searchableTiles.TryGetValue(location, out TileOverlay tile))
+            if (searchableTiles.TryGetValue(location, out var tile))
             {
                 neighborTiles.Add(tile);
             }
         }
 
-        /**
-         * 返回 Tile 之间的曼哈顿距离
-         */
+        /// <summary>
+        /// 返回 Tile 之间的曼哈顿距离
+        /// </summary>
         public static int GetManhattenDistance(TileOverlay tile, TileOverlay neighbor)
         {
             return Mathf.Abs(tile.Location3D.x - neighbor.Location3D.x) +

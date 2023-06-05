@@ -30,17 +30,17 @@ namespace Zinnor.Tactics.Controllers
 
         public Unit ActiveUnit;
 
+        #region Test
+        public int UnitId;
         public GameObject UnitContainer;
         public Unit UnitPrefab;
         public ScriptableWeapon UnitWeapon;
-
-        public void Awake()
-        {
-            DoBuildMap();
-        }
+        #endregion
 
         public void Start()
         {
+            DoBuildMap();
+            
             TestMovementSquares().Forget();
         }
 
@@ -50,7 +50,7 @@ namespace Zinnor.Tactics.Controllers
             var extra = new Stats();
             var tile = TileOverlayMap[location];
             ActiveUnit = Unit.newBuilder()
-                .SetId(1)
+                .SetId(UnitId)
                 .SetPrefab(UnitPrefab)
                 .SetParent(UnitContainer)
                 .SetWeapon(UnitWeapon)
@@ -58,6 +58,7 @@ namespace Zinnor.Tactics.Controllers
                 .SetTile(tile)
                 .SetSortingOrder(1)
                 .Build();
+            ActiveUnit.AfterPropertySet();
 
             var movableTiles = MoveFinder.Find(ActiveUnit, tile, TileOverlayMap);
             TileOverlayUtils.ShowMoveSquares(ActiveUnit, tile, movableTiles.Values.ToList());
@@ -65,10 +66,8 @@ namespace Zinnor.Tactics.Controllers
             var attackableTiles = AttackFinder.Find(ActiveUnit, tile, movableTiles, TileOverlayMap);
             TileOverlayUtils.ShowAttackSquares(ActiveUnit, attackableTiles.Values.ToList());
 
-            var boundsTiles = BoundsFinder.Find(movableTiles.Values,
-                p => movableTiles.ContainsKey(p),
-                p => TileOverlayMap.ContainsKey(p));
-
+            var boundsTiles = BoundsFinder.Find(movableTiles.Values, movableTiles, TileOverlayMap);
+            
             if (boundsTiles.Count != 0)
             {
                 var end = boundsTiles[Random.Range(0, boundsTiles.Count)];
@@ -76,7 +75,7 @@ namespace Zinnor.Tactics.Controllers
                 TileOverlayUtils.ShowMoveArrows(ActiveUnit, tile, pathTiles);
             }
 
-            for (int i = 0; i < 2; ++i)
+            foreach (var i in Enumerable.Range(0, 2))
             {
                 ActiveUnit.Faction = i;
                 ActiveUnit.AfterControllerChanged();
@@ -132,7 +131,7 @@ namespace Zinnor.Tactics.Controllers
                             .SetSortingOrder(sortingOrder)
                             .Build();
 
-                        RegisterTileStub(tileLocation, tile, tileOverlay);
+                        RegisterTileOverlay(tileLocation, tile, tileOverlay);
                     }
                 }
             }
@@ -142,7 +141,7 @@ namespace Zinnor.Tactics.Controllers
             Logger.Info("Starting build map ... [OK]");
         }
 
-        private void RegisterTileStub(Vector3Int tileLocation, TileBase tile, TileOverlay tileOverlay)
+        private void RegisterTileOverlay(Vector3Int tileLocation, TileBase tile, TileOverlay tileOverlay)
         {
             TileOverlayMap.Add(new Vector2Int(tileLocation.x, tileLocation.y), tileOverlay);
             TileOverlayDataMap.TryGetValue(tile, out tileOverlay.OverlayData);

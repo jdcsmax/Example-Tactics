@@ -8,15 +8,15 @@ namespace Zinnor.Tactics.Navigation
 {
     public static class PathFinder
     {
-        /**
-         * 返回 unit 从 start 移动到 end 所经过的路径
-         */
+        /// <summary>
+        /// 返回 unit 从 start 移动到 end 所经过的路径
+        /// </summary>
         public static List<TileOverlay> AStarSearch(
             Unit unit, TileOverlay start, TileOverlay end,
             Dictionary<Vector2Int, TileOverlay> searchableTiles,
             bool excludeStart = true)
         {
-            var closedTiles = new List<TileOverlay>();
+            var selectedTiles = new List<TileOverlay>();
             var priorityTiles = new List<TileOverlay>();
             var neighborTiles = new List<TileOverlay>();
 
@@ -24,31 +24,23 @@ namespace Zinnor.Tactics.Navigation
 
             while (priorityTiles.Count > 0)
             {
-                TileOverlay current = priorityTiles.OrderBy(x => x.F).First();
+                var current = priorityTiles.OrderBy(x => x.F).First();
 
                 priorityTiles.Remove(current);
-                closedTiles.Add(current);
+                selectedTiles.Add(current);
 
                 if (current == end)
                 {
-                    closedTiles.Clear();
-                    closedTiles.Add(end);
-                    BuildShortestPath(closedTiles, end);
-                    closedTiles.Reverse();
-
-                    if (excludeStart)
-                    {
-                        closedTiles.Remove(start);
-                    }
-
-                    return closedTiles;
+                    selectedTiles.Clear();
+                    selectedTiles.Add(end);
+                    return BuildShortestPath(selectedTiles, end, excludeStart ? start : null);
                 }
 
                 NavUtils.GetNeighbors(unit, current, searchableTiles, neighborTiles);
 
                 foreach (var neighbor in neighborTiles)
                 {
-                    if (closedTiles.Contains(neighbor))
+                    if (selectedTiles.Contains(neighbor))
                     {
                         continue;
                     }
@@ -69,16 +61,13 @@ namespace Zinnor.Tactics.Navigation
             return new List<TileOverlay>();
         }
 
-        /**
-         * 返回 unit 从 start 移动到 end 需要的移动消耗
-         *
-         * Dijkstra Algorithm
-         *
-         * Reference: https://www.codeproject.com/Articles/1221034/Pathfinding-Algorithms-in-Csharp
-         */
+        /// <summary>
+        /// 返回 unit 从 start 移动到 end 需要的移动消耗
+        /// </summary>
+        /// <href>https://www.codeproject.com/Articles/1221034/Pathfinding-Algorithms-in-Csharp</href>
         public static List<TileOverlay> DijkstraSearch(
             Unit unit, TileOverlay start, TileOverlay end,
-            Dictionary<Vector2Int, TileOverlay> searchableTiles)
+            IReadOnlyDictionary<Vector2Int, TileOverlay> searchableTiles)
         {
             foreach (var tile in searchableTiles.Values)
             {
@@ -109,18 +98,20 @@ namespace Zinnor.Tactics.Navigation
                         continue;
                     }
 
-                    if (neighbor.C == int.MaxValue || current.C + neighbor.W < neighbor.C)
+                    if (neighbor.C != int.MaxValue && current.C + neighbor.W >= neighbor.C)
                     {
-                        neighbor.C = current.C + neighbor.W;
-                        neighbor.Previous = current;
-
-                        if (priorityTiles.Contains(neighbor))
-                        {
-                            continue;
-                        }
-
-                        priorityTiles.Add(neighbor);
+                        continue;
                     }
+
+                    neighbor.C = current.C + neighbor.W;
+                    neighbor.Previous = current;
+
+                    if (priorityTiles.Contains(neighbor))
+                    {
+                        continue;
+                    }
+
+                    priorityTiles.Add(neighbor);
                 }
 
                 current.Visited = true;
@@ -136,19 +127,29 @@ namespace Zinnor.Tactics.Navigation
 
         private static List<TileOverlay> BuildShortestPath(TileOverlay end)
         {
-            var shortestPath = new List<TileOverlay>() { end };
-            BuildShortestPath(shortestPath, end);
-            shortestPath.Reverse();
-            return shortestPath;
+            return BuildShortestPath(new List<TileOverlay>() { end }, end);
         }
 
-        private static void BuildShortestPath(List<TileOverlay> tiles, TileOverlay tile)
+        private static List<TileOverlay> BuildShortestPath(
+            List<TileOverlay> shortestPath, TileOverlay end, TileOverlay exclude = null)
         {
-            if (tile.Previous != null)
+            var curr = end;
+
+            while (curr.Previous != null)
             {
-                tiles.Add(tile.Previous);
-                BuildShortestPath(tiles, tile.Previous);
+                shortestPath.Add(curr.Previous);
+
+                curr = curr.Previous;
             }
+
+            shortestPath.Reverse();
+
+            if (exclude != null)
+            {
+                shortestPath.Remove(exclude);
+            }
+
+            return shortestPath;
         }
     }
 }

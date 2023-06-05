@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zinnor.Tactics.Tiles;
 
@@ -7,40 +7,31 @@ namespace Zinnor.Tactics.Navigation
 {
     public static class BoundsFinder
     {
-        public static List<TileOverlay> Find(IEnumerable<TileOverlay> movableTiles,
-            Func<Vector2Int, bool> movable, Func<Vector2Int, bool> searchable)
+        public static List<TileOverlay> Find(IEnumerable<TileOverlay> tiles,
+            IReadOnlyDictionary<Vector2Int, TileOverlay> movableTiles,
+            IReadOnlyDictionary<Vector2Int, TileOverlay> searchableTiles)
+
         {
-            var boundsTiles = new List<TileOverlay>();
-
-            foreach (var item in movableTiles)
-            {
-                if (IsOutside(item, movable, searchable))
-                {
-                    boundsTiles.Add(item);
-                }
-            }
-
-            return boundsTiles;
+            return tiles.Where(tile => IsOutside(tile, movableTiles, searchableTiles))
+                .Select(tile => tile)
+                .ToList();
         }
 
-        public static bool IsOutside(TileOverlay tile,
-            Func<Vector2Int, bool> movable, Func<Vector2Int, bool> searchable)
+        private static bool IsOutside(TileOverlay tile,
+            IReadOnlyDictionary<Vector2Int, TileOverlay> movableTiles,
+            IReadOnlyDictionary<Vector2Int, TileOverlay> searchableTiles)
         {
-            return IsOutside(NavUtils.Top(tile.Location3D), movable, searchable) ||
-                   IsOutside(NavUtils.Bottom(tile.Location3D), movable, searchable) ||
-                   IsOutside(NavUtils.Right(tile.Location3D), movable, searchable) ||
-                   IsOutside(NavUtils.Left(tile.Location3D), movable, searchable);
+            return IsOutside(NavUtils.Top(tile.Location3D), movableTiles, searchableTiles) ||
+                   IsOutside(NavUtils.Bottom(tile.Location3D), movableTiles, searchableTiles) ||
+                   IsOutside(NavUtils.Right(tile.Location3D), movableTiles, searchableTiles) ||
+                   IsOutside(NavUtils.Left(tile.Location3D), movableTiles, searchableTiles);
         }
 
         private static bool IsOutside(Vector2Int position,
-            Func<Vector2Int, bool> movable, Func<Vector2Int, bool> searchable)
+            IReadOnlyDictionary<Vector2Int, TileOverlay> movableTiles,
+            IReadOnlyDictionary<Vector2Int, TileOverlay> searchableTiles)
         {
-            if (movable.Invoke(position))
-            {
-                return false;
-            }
-
-            return searchable.Invoke(position);
+            return !movableTiles.ContainsKey(position) && searchableTiles.ContainsKey(position);
         }
     }
 }

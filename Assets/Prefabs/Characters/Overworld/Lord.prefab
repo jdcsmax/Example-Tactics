@@ -126,8 +126,9 @@ MonoBehaviour:
   Weapon: {fileID: 0}
   Tile: {fileID: 0}
   HP: 0
-  Animator: {fileID: -3022391694464876480}
   State: 0
+  Animator: {fileID: -3022391694464876480}
+  Renderer: {fileID: 6567825542214348016}
 --- !u!114 &-3022391694464876480
 MonoBehaviour:
   m_ObjectHideFlags: 0

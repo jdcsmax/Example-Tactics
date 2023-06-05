@@ -128,6 +128,7 @@ MonoBehaviour:
   HP: 0
   State: 0
   Animator: {fileID: -1079561329709187550}
+  Renderer: {fileID: 1982635047931281782}
 --- !u!114 &-1079561329709187550
 MonoBehaviour:
   m_ObjectHideFlags: 0

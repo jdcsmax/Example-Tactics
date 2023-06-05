@@ -12271,10 +12271,10 @@ MonoBehaviour:
   TileMask: {fileID: 1148659502}
   TileGround: {fileID: 467488763}
   ActiveUnit: {fileID: 0}
+  UnitId: 1
   UnitContainer: {fileID: 2068389846}
   UnitPrefab: {fileID: -8889360850761679553, guid: aa47d56b8a48f7543bd8e7024fb8f73a, type: 3}
   UnitWeapon: {fileID: 11400000, guid: 2554e3bb49fc2b140a9d13cb6d55e94f, type: 2}
-  UnitFaction: 0
 --- !u!1 &1148659499
 GameObject:
   m_ObjectHideFlags: 0

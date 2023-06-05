@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Tilemaps;
 using Zinnor.Tactics.Scriptables.Abilities;
 using Zinnor.Tactics.Scriptables.Classes;
 using Zinnor.Tactics.Scriptables.Weapons;
@@ -34,7 +35,7 @@ namespace Zinnor.Tactics.Units
         public Stats Extra;
 
         /// <summary>
-        /// 位置
+        /// 占据格子
         /// </summary>
         public TileOverlay Tile;
 
@@ -94,24 +95,29 @@ namespace Zinnor.Tactics.Units
         public bool Armored => Class.Armored;
 
         /// <summary>
-        /// 最小攻击距离
+        /// 最小攻击范围
         /// </summary>
-        public int MinAttackDistance => Weapon.MinRange;
+        public int MinAttackRange => Weapon.MinRange;
 
         /// <summary>
-        /// 最大攻击距离
+        /// 最大攻击范围
         /// </summary>
-        public int MaxAttackDistance => Weapon.MaxRange;
+        public int MaxAttackRange => Weapon.MaxRange;
 
-        /**
-         * 单位状态
-         */
+        /// <summary>
+        /// 单位状态
+        /// </summary>
         public UnitStates State;
 
-        /**
-         * 单位动画器
-         */
+        /// <summary>
+        /// 单位动画器
+        /// </summary>
         public UnitAnimator Animator;
+
+        /// <summary>
+        /// 精灵绘制器
+        /// </summary>
+        public SpriteRenderer Renderer;
 
         public void AfterControllerChanged()
         {
@@ -128,6 +134,35 @@ namespace Zinnor.Tactics.Units
             Animator.AfterPropertySet();
         }
 
+        /// <summary>
+        /// 占据格子
+        /// </summary>
+        public void AcquireTile(TileOverlay tile)
+        {
+            if (tile == null)
+            {
+                return;
+            }
+
+            Tile = tile;
+            tile.Occupier = this;
+            transform.position = Tile.transform.position;
+        }
+
+        /// <summary>
+        /// 释放格子
+        /// </summary>
+        public void ReleaseTile()
+        {
+            if (Tile == null)
+            {
+                return;
+            }
+
+            Tile.Occupier = null;
+            Tile = null;
+        }
+
         /**
          * 能否通过
          */
@@ -135,12 +170,12 @@ namespace Zinnor.Tactics.Units
         {
             if (tile.Walkable)
             {
-                return Traverable(tile.Holder);
+                return Traverable(tile.Occupier);
             }
 
             if (tile.Flyable && Flying)
             {
-                return Traverable(tile.Holder);
+                return Traverable(tile.Occupier);
             }
 
             return false;
@@ -149,23 +184,42 @@ namespace Zinnor.Tactics.Units
         /**
          * 能否通过
          */
-        public bool Traverable(Unit unit)
+        private bool Traverable(Unit unit)
         {
             return unit == null || Faction == unit.Faction;
         }
+
+        public class ScriptableMoveCost : ScriptableObject
+        {
+            public TileBase MatchedTile;
+            public int RequireCost;
+        }
+
+        public ScriptableMoveCost[] MoveCosts;
 
         /**
          * 移动消耗
          */
         public int MoveCost(TileOverlay tile)
         {
-            // todo: 根据地形和职业计算移动消耗
+            foreach (var MoveCost in MoveCosts)
+            {
+                if (tile.OverlayData.Tile == MoveCost.MatchedTile)
+                {
+                    return MoveCost.RequireCost;
+                }
+            }
+
             return 1;
+        }
+
+        public void ShowMoveArrow(TileOverlay tile, TileArrowDirection direction)
+        {
+            tile.ShowArrowSprite(direction);
         }
 
         public void ShowMoveSprite(TileOverlay tile)
         {
-            // todo: 通过职业配置数据来确定移动到 tile 需要的移动消耗
             tile.ShowMoveSprite();
         }
 
@@ -175,18 +229,14 @@ namespace Zinnor.Tactics.Units
             {
                 tile.HideOverlaySprite();
             }
-
-            // todo: 放入通过派送类进行覆盖
-            if (Class.name == "Cleric" || Class.name == "Curate")
+            else if (Weapon.Type.name == "Staves")
             {
-                if (Weapon != null && Weapon.Type.name == "Staves")
-                {
-                    tile.ShowHealSprite();
-                    return;
-                }
+                tile.ShowHealSprite();
             }
-
-            tile.ShowAttackSprite();
+            else
+            {
+                tile.ShowAttackSprite();
+            }
         }
 
         public static Builder newBuilder()
@@ -263,16 +313,9 @@ namespace Zinnor.Tactics.Units
 
                 unit.Extra = _extra;
                 unit.HP = unit.MaxHP;
-
-                unit.Tile = _tile;
-                unit.transform.position = _tile.transform.position;
-                _tile.Holder = unit;
-
-                unit.GetComponent<SpriteRenderer>().sortingOrder = _sortingOrder;
-
+                unit.Renderer.sortingOrder = _sortingOrder;
                 unit.State = UnitStates.Idle;
-
-                unit.AfterPropertySet();
+                unit.AcquireTile(_tile);
 
                 return unit;
             }

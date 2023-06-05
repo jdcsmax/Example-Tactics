@@ -1,31 +1,27 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Zinnor.Tactics.Units;
 
 namespace Zinnor.Tactics.Tiles
 {
     public static class TileOverlayUtils
     {
-        public static void ShowMoveSquares(Unit unit, TileOverlay start, List<TileOverlay> movableTiles)
+        public static void ShowMoveArrows(Unit unit, TileOverlay start, List<TileOverlay> pathTiles)
         {
-            foreach (var tile in movableTiles)
+            for (var i = 0; i < pathTiles.Count; i++)
             {
-                if (tile == start)
-                {
-                    continue;
-                }
-
-                unit.ShowMoveSprite(tile);
+                var previousTile = i > 0 ? pathTiles[i - 1] : start;
+                var currentTile = pathTiles[i];
+                var futureTile = i + 1 < pathTiles.Count ? pathTiles[i + 1] : null;
+                unit.ShowMoveArrow(currentTile, TileArrowTranslator.Direction(previousTile, currentTile, futureTile));
             }
         }
 
-        public static void ShowMoveArrows(Unit unit, TileOverlay start, List<TileOverlay> pathTiles)
+        public static void ShowMoveSquares(Unit unit, TileOverlay start, List<TileOverlay> movableTiles)
         {
-            for (int i = 0; i < pathTiles.Count; i++)
+            foreach (var tile in movableTiles.Where(tile => tile != start))
             {
-                TileOverlay previousTile = i > 0 ? pathTiles[i - 1] : start;
-                TileOverlay currentTile = pathTiles[i];
-                TileOverlay futureTile = i + 1 < pathTiles.Count ? pathTiles[i + 1] : null;
-                currentTile.ShowArrowSprite(TileArrowTranslator.Direction(previousTile, currentTile, futureTile));
+                unit.ShowMoveSprite(tile);
             }
         }
 

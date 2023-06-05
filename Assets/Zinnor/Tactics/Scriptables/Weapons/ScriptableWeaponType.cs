@@ -8,9 +8,9 @@ namespace Zinnor.Tactics.Scriptables.Weapons
     [CreateAssetMenu(fileName = "ScriptableWeaponType", menuName = "ScriptableObjects/ScriptableWeaponType")]
     public class ScriptableWeaponType : ScriptableObject
     {
-        /**
-         * 描述
-         */
+        /// <summary>
+        /// 描述信息
+        /// </summary>
         public string Message;
     }
 }

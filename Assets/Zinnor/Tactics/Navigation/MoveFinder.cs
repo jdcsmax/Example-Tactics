@@ -17,7 +17,7 @@ namespace Zinnor.Tactics.Navigation
             var neighborTiles = new List<TileOverlay>();
             var rangeTiles = new Dictionary<Vector2Int, TileOverlay>();
             var movableTiles = new Dictionary<Vector2Int, TileOverlay>();
-            int distance = 0;
+            var distance = 0;
 
             tiles.Add(start);
 

@@ -56,27 +56,34 @@ namespace Zinnor.Tactics.Tiles
         /// </summary>
         public Vector2Int Location2D => new Vector2Int(Location3D.x, Location3D.y);
 
+        /// <summary>
+        /// 格子精灵绘制器
+        /// </summary>
         public SpriteRenderer TileSpriteRenderer;
+
+        /// <summary>
+        /// 箭头精灵绘制器
+        /// </summary>
         public SpriteRenderer ArrowSpriteRenderer;
 
-        /**
-         * 路径指针
-         */
+        /// <summary>
+        /// 用来显示移动路径的箭头
+        /// </summary>
         public List<Sprite> ArrowSprites;
 
-        /**
-         * 治疗格子
-         */
+        /// <summary>
+        /// 用来显示治疗范围内的格子
+        /// </summary>
         public Sprite HealSprite;
 
         /// <summary>
-        /// 攻击格子
+        /// 用来显示攻击范围内的格子
         /// </summary>
         public Sprite AttackSprite;
 
-        /**
-         * 移动格子
-         */
+        /// <summary>
+        /// 用来显示移动范围内的格子
+        /// </summary>
         public Sprite MoveSprite;
 
         /// <summary>
@@ -100,9 +107,9 @@ namespace Zinnor.Tactics.Tiles
         public bool Traverable => OverlayData.Traverable;
 
         /// <summary>
-        /// 占据格子的 Unit
+        /// 占有单位
         /// </summary>
-        public Unit Holder;
+        public Unit Occupier;
 
         /// <summary>
         /// 显示治疗覆盖精灵
@@ -148,7 +155,7 @@ namespace Zinnor.Tactics.Tiles
         }
 
         /// <summary>
-        /// 显示指针精灵
+        /// 显示箭头精灵
         /// </summary>
         public void ShowArrowSprite(TileArrowDirection direction)
         {

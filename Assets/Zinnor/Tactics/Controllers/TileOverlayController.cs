@@ -6,10 +6,6 @@ namespace Zinnor.Tactics.Controllers
 {
     public class TileOverlayController : MonoBehaviour
     {
-        private static TileOverlayController _instance;
-
-        public static TileOverlayController Instance => _instance;
-
         public Color AttackRangeColor;
         public Color MoveRangeColor;
         public Color BlockedTileColor;
@@ -18,15 +14,6 @@ namespace Zinnor.Tactics.Controllers
 
         private void Awake()
         {
-            if (_instance != null && _instance != this)
-            {
-                Destroy(this.gameObject);
-            }
-            else
-            {
-                _instance = this;
-            }
-
             ColoredTiles = new Dictionary<Color, List<TileOverlay>>();
         }
 
