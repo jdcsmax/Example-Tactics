@@ -13,7 +13,7 @@ namespace Zinnor.Tactics.Navigation
         /// </summary>
         public static List<TileOverlay> AStarSearch(
             Unit unit, TileOverlay start, TileOverlay end,
-            Dictionary<Vector2Int, TileOverlay> searchableTiles,
+            IReadOnlyDictionary<Vector2Int, TileOverlay> searchableTiles,
             bool excludeStart = true)
         {
             var selectedTiles = new List<TileOverlay>();

@@ -19,6 +19,8 @@ namespace Zinnor.Tactics.Scriptables.Weapons
 
         public List<ScriptableEffect> Effects;
 
+        public bool Assist;
+
         public string Rank;
 
         public int MinRange;

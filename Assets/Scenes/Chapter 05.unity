@@ -11955,9 +11955,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c06e611d4d791a742bfc281fc2a67a6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackRangeColor: {r: 0, g: 0, b: 0, a: 0}
-  MoveRangeColor: {r: 0, g: 0, b: 0, a: 0}
-  BlockedTileColor: {r: 0, g: 0, b: 0, a: 0}
+  ArrowSprites:
+  - {fileID: 0}
+  - {fileID: 547019042, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  - {fileID: -1404377730, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  - {fileID: -1497176058, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  - {fileID: 1438069203, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  - {fileID: -664472721, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  - {fileID: -728964840, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  - {fileID: 1223843447, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  - {fileID: -995909106, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  - {fileID: 1801001968, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  - {fileID: -1703516684, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  - {fileID: 1816356706, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  - {fileID: -1548817164, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
+  AssistSprite: {fileID: 1222292584, guid: 013f7ea653bbaf146b3b5889dcc23110, type: 3}
+  AttackSprite: {fileID: 1954870877, guid: 013f7ea653bbaf146b3b5889dcc23110, type: 3}
+  MovementSprite: {fileID: 1593524804, guid: 013f7ea653bbaf146b3b5889dcc23110, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -12271,9 +12285,10 @@ MonoBehaviour:
   TileMask: {fileID: 1148659502}
   TileGround: {fileID: 467488763}
   ActiveUnit: {fileID: 0}
+  TileOverlayController: {fileID: 500221092}
   UnitId: 1
   UnitContainer: {fileID: 2068389846}
-  UnitPrefab: {fileID: -8889360850761679553, guid: aa47d56b8a48f7543bd8e7024fb8f73a, type: 3}
+  UnitPrefab: {fileID: 1283432741015199107, guid: dcb73406a60ba504da7617d172117f49, type: 3}
   UnitWeapon: {fileID: 11400000, guid: 2554e3bb49fc2b140a9d13cb6d55e94f, type: 2}
 --- !u!1 &1148659499
 GameObject:

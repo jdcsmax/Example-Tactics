@@ -1,90 +1,98 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Zinnor.Supports;
 using Zinnor.Tactics.Tiles;
+using Zinnor.Tactics.Units;
 
 namespace Zinnor.Tactics.Controllers
 {
     public class TileOverlayController : MonoBehaviour
     {
-        public Color AttackRangeColor;
-        public Color MoveRangeColor;
-        public Color BlockedTileColor;
+        /// <summary>
+        /// 路径箭头
+        /// </summary>
+        public List<Sprite> ArrowSprites;
 
-        public Dictionary<Color, List<TileOverlay>> ColoredTiles;
+        /// <summary>
+        /// 辅助格子
+        /// </summary>
+        public Sprite AssistSprite;
 
-        private void Awake()
+        /// <summary>
+        /// 攻击格子
+        /// </summary>
+        public Sprite AttackSprite;
+
+        /// <summary>
+        /// 移动格子
+        /// </summary>
+        public Sprite MovementSprite;
+
+        public void ShowActionSquares(Unit unit, TileOverlay start, IEnumerable<TileOverlay> tiles)
         {
-            ColoredTiles = new Dictionary<Color, List<TileOverlay>>();
+            if (unit.Weapon == null)
+            {
+                foreach (var tile in tiles.Where(tile => tile != start))
+                {
+                    HideTileSprite(tile);
+                }
+            }
+            else if (unit.Weapon.Assist)
+            {
+                foreach (var tile in tiles.Where(tile => tile != start))
+                {
+                    ShowTileSprite(tile.TileSpriteRenderer, AssistSprite, Colors.Square);
+                }
+            }
+            else
+            {
+                foreach (var tile in tiles.Where(tile => tile != start))
+                {
+                    ShowTileSprite(tile.TileSpriteRenderer, AttackSprite, Colors.Square);
+                }
+            }
         }
 
-        // public void ClearTiles(Color? color = null)
-        // {
-        //     if (color.HasValue)
-        //     {
-        //         if (ColoredTiles.ContainsKey(color.Value))
-        //         {
-        //             var tiles = ColoredTiles[color.Value];
-        //             ColoredTiles.Remove(color.Value);
-        //
-        //             foreach (var coloredTile in tiles)
-        //             {
-        //                 coloredTile.HideTile();
-        //
-        //                 foreach (var usedColors in ColoredTiles.Keys)
-        //                 {
-        //                     foreach (var usedTile in ColoredTiles[usedColors])
-        //                     {
-        //                         if (coloredTile.Grid2DLocation == usedTile.Grid2DLocation)
-        //                         {
-        //                             coloredTile.ShowTile(usedColors);
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     else
-        //     {
-        //         foreach (var item in ColoredTiles.Keys)
-        //         {
-        //             foreach (var tile in ColoredTiles[item])
-        //             {
-        //                 tile.HideTile();
-        //             }
-        //         }
-        //
-        //         ColoredTiles.Clear();
-        //     }
-        // }
-        //
-        // public void ShowTiles(Sprite sprite, List<TileOverlay> overlayTiles)
-        // {
-        //     ClearTiles(color);
-        //
-        //     foreach (var tile in overlayTiles)
-        //     {
-        //         tile.ShowTile(sprite);
-        //
-        //         if (tile.Blocked)
-        //         {
-        //             tile.HideTile();
-        //         }
-        //     }
-        //
-        //     ColoredTiles.Add(color, overlayTiles);
-        // }
-        //
-        // public void ColorSingleTile(Color color, TileOverlay tile)
-        // {
-        //     ClearTiles(color);
-        //     tile.ShowTile(color);
-        //
-        //     if (tile.Blocked)
-        //     {
-        //         tile.ShowTile(BlockedTileColor);
-        //     }
-        //
-        //     ColoredTiles.Add(color, new List<TileOverlay> { tile });
-        // }
+        public void ShowMovementSquares(TileOverlay start, IEnumerable<TileOverlay> movableTiles)
+        {
+            foreach (var tile in movableTiles.Where(tile => tile != start))
+            {
+                ShowTileSprite(tile.TileSpriteRenderer, MovementSprite, Colors.Square);
+            }
+        }
+
+        public void ShowPathingArrows(TileOverlay start, List<TileOverlay> pathingTiles)
+        {
+            for (var i = 0; i < pathingTiles.Count; i++)
+            {
+                var previousTile = i > 0 ? pathingTiles[i - 1] : start;
+                var currentTile = pathingTiles[i];
+                var futureTile = i + 1 < pathingTiles.Count ? pathingTiles[i + 1] : null;
+                var direction = TileArrowTranslator.Direction(previousTile, currentTile, futureTile);
+
+                if (direction != TileArrowDirection.None)
+                {
+                    currentTile.ArrowSpriteRenderer.sprite = ArrowSprites[(int)direction];
+                    currentTile.ArrowSpriteRenderer.color = Colors.Opaque;
+                }
+                else
+                {
+                    currentTile.ArrowSpriteRenderer.color = Colors.Transparent;
+                }
+            }
+        }
+
+        private static void ShowTileSprite(SpriteRenderer renderer, Sprite sprite, Color color)
+        {
+            renderer.sprite = sprite;
+            renderer.color = color;
+        }
+
+        private static void HideTileSprite(TileOverlay tile)
+        {
+            tile.TileSpriteRenderer.color = Colors.Transparent;
+            tile.ArrowSpriteRenderer.color = Colors.Transparent;
+        }
     }
 }

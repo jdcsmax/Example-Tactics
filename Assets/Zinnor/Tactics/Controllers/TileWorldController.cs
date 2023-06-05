@@ -31,6 +31,8 @@ namespace Zinnor.Tactics.Controllers
         public Unit ActiveUnit;
 
         #region Test
+
+        public TileOverlayController TileOverlayController;
         public int UnitId;
         public GameObject UnitContainer;
         public Unit UnitPrefab;
@@ -61,18 +63,18 @@ namespace Zinnor.Tactics.Controllers
             ActiveUnit.AfterPropertySet();
 
             var movableTiles = MoveFinder.Find(ActiveUnit, tile, TileOverlayMap);
-            TileOverlayUtils.ShowMoveSquares(ActiveUnit, tile, movableTiles.Values.ToList());
+            TileOverlayController.ShowMovementSquares(tile, movableTiles.Values);
 
             var attackableTiles = AttackFinder.Find(ActiveUnit, tile, movableTiles, TileOverlayMap);
-            TileOverlayUtils.ShowAttackSquares(ActiveUnit, attackableTiles.Values.ToList());
+            TileOverlayController.ShowActionSquares(ActiveUnit, tile, attackableTiles.Values);
 
             var boundsTiles = BoundsFinder.Find(movableTiles.Values, movableTiles, TileOverlayMap);
             
             if (boundsTiles.Count != 0)
             {
                 var end = boundsTiles[Random.Range(0, boundsTiles.Count)];
-                var pathTiles = PathFinder.AStarSearch(ActiveUnit, tile, end, movableTiles);
-                TileOverlayUtils.ShowMoveArrows(ActiveUnit, tile, pathTiles);
+                var pathingTiles = PathFinder.AStarSearch(ActiveUnit, tile, end, movableTiles);
+                TileOverlayController.ShowPathingArrows(tile, pathingTiles);
             }
 
             foreach (var i in Enumerable.Range(0, 2))
@@ -82,11 +84,15 @@ namespace Zinnor.Tactics.Controllers
                 
                 foreach (UnitStates state in Enum.GetValues(typeof(UnitStates)))
                 {
-                    await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale:false);
                     ActiveUnit.State = state;
                     ActiveUnit.AfterStateChanged();
+                    await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale:false);
                 }
             }
+
+            ActiveUnit.Faction = 0;
+            ActiveUnit.State = UnitStates.Idle;
+            ActiveUnit.AfterPropertySet();
         }
 
         private void DoBuildMap()
@@ -156,14 +162,6 @@ namespace Zinnor.Tactics.Controllers
         private void HideTileMask()
         {
             TileMask.gameObject.SetActive(false);
-        }
-
-        public void ClearTiles()
-        {
-            foreach (var item in TileOverlayMap)
-            {
-                item.Value.HideOverlaySprite();
-            }
         }
     }
 }

@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using UnityEngine;
-using Zinnor.Supports;
 using Zinnor.Tactics.Units;
 
 namespace Zinnor.Tactics.Tiles
@@ -67,26 +65,6 @@ namespace Zinnor.Tactics.Tiles
         public SpriteRenderer ArrowSpriteRenderer;
 
         /// <summary>
-        /// 用来显示移动路径的箭头
-        /// </summary>
-        public List<Sprite> ArrowSprites;
-
-        /// <summary>
-        /// 用来显示治疗范围内的格子
-        /// </summary>
-        public Sprite HealSprite;
-
-        /// <summary>
-        /// 用来显示攻击范围内的格子
-        /// </summary>
-        public Sprite AttackSprite;
-
-        /// <summary>
-        /// 用来显示移动范围内的格子
-        /// </summary>
-        public Sprite MoveSprite;
-
-        /// <summary>
         /// 数据配置
         /// </summary>
         public TileOverlayData OverlayData;
@@ -110,67 +88,6 @@ namespace Zinnor.Tactics.Tiles
         /// 占有单位
         /// </summary>
         public Unit Occupier;
-
-        /// <summary>
-        /// 显示治疗覆盖精灵
-        /// </summary>
-        public void ShowHealSprite()
-        {
-            ShowOverlaySprite(HealSprite);
-        }
-
-        /// <summary>
-        /// 显示攻击覆盖精灵
-        /// </summary>
-        public void ShowAttackSprite()
-        {
-            ShowOverlaySprite(AttackSprite);
-        }
-
-        /// <summary>
-        /// 显示移动覆盖精灵
-        /// </summary>
-        public void ShowMoveSprite()
-        {
-            ShowOverlaySprite(MoveSprite);
-        }
-
-        /// <summary>
-        /// 显示格子覆盖精灵
-        /// </summary>
-        public void ShowOverlaySprite(Sprite sprite)
-        {
-            TileSpriteRenderer.sprite = sprite;
-            TileSpriteRenderer.color = Colors.Square;
-        }
-
-        /// <summary>
-        /// 隐藏格子覆盖精灵
-        /// </summary>
-        public void HideOverlaySprite()
-        {
-            TileSpriteRenderer.color = Colors.Transparent;
-
-            ShowArrowSprite(TileArrowDirection.None);
-        }
-
-        /// <summary>
-        /// 显示箭头精灵
-        /// </summary>
-        public void ShowArrowSprite(TileArrowDirection direction)
-        {
-            ArrowSpriteRenderer.sortingOrder = 1;
-
-            if (direction == TileArrowDirection.None)
-            {
-                ArrowSpriteRenderer.color = Colors.Transparent;
-            }
-            else
-            {
-                ArrowSpriteRenderer.color = Colors.Opaque;
-                ArrowSpriteRenderer.sprite = ArrowSprites[(int)direction];
-            }
-        }
 
         public static Builder NewBuilder()
         {
@@ -222,6 +139,7 @@ namespace Zinnor.Tactics.Tiles
                 tileOverlay.transform.position = new Vector3(
                     _worldPosition.x, _worldPosition.y, _worldPosition.z + 1);
                 tileOverlay.TileSpriteRenderer.sortingOrder = _sortingOrder;
+                tileOverlay.ArrowSpriteRenderer.sortingOrder = _sortingOrder + 1;
                 return tileOverlay;
             }
         }

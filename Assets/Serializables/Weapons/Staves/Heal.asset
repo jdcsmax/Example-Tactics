@@ -16,6 +16,8 @@ MonoBehaviour:
   Type: {fileID: 11400000, guid: d11146c7ae43adf4580802cf2f7d34f9, type: 2}
   Element: {fileID: 0}
   Gender: {fileID: 0}
+  Effects: []
+  Assist: 1
   Rank: E
   MinRange: 1
   MaxRange: 1
@@ -26,4 +28,3 @@ MonoBehaviour:
   WeaponExp: 2
   Exp: 17
   Price: 800
-  Effects: []

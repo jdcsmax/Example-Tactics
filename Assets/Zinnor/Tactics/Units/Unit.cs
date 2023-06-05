@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.Tilemaps;
+﻿using System.Linq;
+using log4net;
+using UnityEngine;
 using Zinnor.Tactics.Scriptables.Abilities;
 using Zinnor.Tactics.Scriptables.Classes;
 using Zinnor.Tactics.Scriptables.Weapons;
@@ -9,6 +10,8 @@ namespace Zinnor.Tactics.Units
 {
     public class Unit : MonoBehaviour
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(Unit));
+
         /// <summary>
         /// 唯一编号
         /// </summary>
@@ -163,9 +166,9 @@ namespace Zinnor.Tactics.Units
             Tile = null;
         }
 
-        /**
-         * 能否通过
-         */
+        /// <summary>
+        /// 能否通过
+        /// </summary>
         public bool Traverable(TileOverlay tile)
         {
             if (tile.Walkable)
@@ -181,62 +184,22 @@ namespace Zinnor.Tactics.Units
             return false;
         }
 
-        /**
-         * 能否通过
-         */
+        /// <summary>
+        /// 能否通过
+        /// </summary>
         private bool Traverable(Unit unit)
         {
             return unit == null || Faction == unit.Faction;
         }
 
-        public class ScriptableMoveCost : ScriptableObject
-        {
-            public TileBase MatchedTile;
-            public int RequireCost;
-        }
-
-        public ScriptableMoveCost[] MoveCosts;
-
-        /**
-         * 移动消耗
-         */
+        /// <summary>
+        /// 移动消耗
+        /// </summary>
         public int MoveCost(TileOverlay tile)
         {
-            foreach (var MoveCost in MoveCosts)
-            {
-                if (tile.OverlayData.Tile == MoveCost.MatchedTile)
-                {
-                    return MoveCost.RequireCost;
-                }
-            }
-
-            return 1;
-        }
-
-        public void ShowMoveArrow(TileOverlay tile, TileArrowDirection direction)
-        {
-            tile.ShowArrowSprite(direction);
-        }
-
-        public void ShowMoveSprite(TileOverlay tile)
-        {
-            tile.ShowMoveSprite();
-        }
-
-        public void ShowAttackSprite(TileOverlay tile)
-        {
-            if (Weapon == null)
-            {
-                tile.HideOverlaySprite();
-            }
-            else if (Weapon.Type.name == "Staves")
-            {
-                tile.ShowHealSprite();
-            }
-            else
-            {
-                tile.ShowAttackSprite();
-            }
+            var restriction = Class.Restrictions.FirstOrDefault(
+                r => tile.OverlayData == r.OverlayData);
+            return restriction != null ? restriction.MoveCost : 1;
         }
 
         public static Builder newBuilder()

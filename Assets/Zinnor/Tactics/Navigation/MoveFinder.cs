@@ -11,7 +11,7 @@ namespace Zinnor.Tactics.Navigation
          * 返回可以移动的 Tile 列表
          */
         public static Dictionary<Vector2Int, TileOverlay> Find(
-            Unit unit, TileOverlay start, Dictionary<Vector2Int, TileOverlay> searchableTiles)
+            Unit unit, TileOverlay start, IReadOnlyDictionary<Vector2Int, TileOverlay> searchableTiles)
         {
             var tiles = new HashSet<TileOverlay>();
             var neighborTiles = new List<TileOverlay>();

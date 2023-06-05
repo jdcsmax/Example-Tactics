@@ -31,3 +31,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aedbc6f12bc63934d897f9f5024af6ea, type: 2}
   - {fileID: 11400000, guid: 7ef81294c2f88f44a8c1e5d8530ef58e, type: 2}
   Abilities: []
+  Restrictions:
+  - {fileID: 11400000, guid: 32dedf49442a454439a0042e9f851987, type: 2}
+  - {fileID: 11400000, guid: 73a79b761532b224f8fd44a68a1784b4, type: 2}
+  - {fileID: 11400000, guid: 863ed24ab907a5c4493fa6f75673dc1d, type: 2}
+  - {fileID: 11400000, guid: dc0470225805c8e45acc13d8b0a28d51, type: 2}
+  - {fileID: 11400000, guid: e9b0b774ba0a1bc4d9ae124e577df86d, type: 2}

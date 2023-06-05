@@ -191,22 +191,5 @@ MonoBehaviour:
   Location3D: {x: 0, y: 0, z: 0}
   TileSpriteRenderer: {fileID: 6657912321402926563}
   ArrowSpriteRenderer: {fileID: 8118317382974294480}
-  ArrowSprites:
-  - {fileID: 0}
-  - {fileID: 547019042, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  - {fileID: -1404377730, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  - {fileID: -1497176058, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  - {fileID: 1438069203, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  - {fileID: -664472721, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  - {fileID: -728964840, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  - {fileID: 1223843447, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  - {fileID: -995909106, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  - {fileID: 1801001968, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  - {fileID: -1703516684, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  - {fileID: 1816356706, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  - {fileID: -1548817164, guid: 51aa674be51bbd14e9fb190de6f7e721, type: 3}
-  HealSprite: {fileID: 1222292584, guid: 013f7ea653bbaf146b3b5889dcc23110, type: 3}
-  AttackSprite: {fileID: 1954870877, guid: 013f7ea653bbaf146b3b5889dcc23110, type: 3}
-  MoveSprite: {fileID: 1593524804, guid: 013f7ea653bbaf146b3b5889dcc23110, type: 3}
   OverlayData: {fileID: 0}
-  Holder: {fileID: 0}
+  Occupier: {fileID: 0}

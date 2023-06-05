@@ -2,7 +2,7 @@
 
 namespace Zinnor.Supports
 {
-    public sealed class Colors
+    public static class Colors
     {
         public static readonly Color Opaque = new Color(1, 1, 1, 1);
 

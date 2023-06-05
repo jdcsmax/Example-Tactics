@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using CollisionBear.PreviewObjectPicker;
 using UnityEngine;
 using Zinnor.Tactics.Scriptables.Effects;
+using Zinnor.Tactics.Scriptables.Restrictions;
 using Zinnor.Tactics.Scriptables.Weapons;
 
 namespace Zinnor.Tactics.Scriptables.Classes
 {
-    /**
-     * 职业
-     */
+    /// <summary>
+    /// 职业
+    /// </summary>
     [CreateAssetMenu(fileName = "ScriptableClass", menuName = "ScriptableObjects/ScriptableClass")]
     public class ScriptableClass : ScriptableObject
     {
@@ -22,79 +22,84 @@ namespace Zinnor.Tactics.Scriptables.Classes
         /// </summary>
         public int HP;
 
-        /**
-         * 力量
-         */
+        /// <summary>
+        /// 力量
+        /// </summary>
         public int Strength;
 
-        /**
-         * 魔力
-         */
+        /// <summary>
+        /// 魔力
+        /// </summary>
         public int Magic;
 
-        /**
-         * 技巧
-         */
+        /// <summary>
+        /// 技巧
+        /// </summary>
         public int Skill;
 
-        /**
-         * 速度
-         */
+        /// <summary>
+        /// 速度
+        /// </summary>
         public int Speed;
 
-        /**
-         * 幸运
-         */
+        /// <summary>
+        /// 幸运
+        /// </summary>
         public int Luck;
 
-        /**
-         * 物防
-         */
+        /// <summary>
+        /// 物防
+        /// </summary>
         public int Defense;
 
-        /**
-         * 魔防
-         */
+        /// <summary>
+        /// 魔防
+        /// </summary>
         public int Resistance;
 
-        /**
-         * 移动
-         */
+        /// <summary>
+        /// 移动
+        /// </summary>
         public int Movement;
 
-        /**
-         * 飞行单位
-         */
+        /// <summary>
+        /// 飞行
+        /// </summary>
         public bool Flying;
 
-        /**
-         * 骑兵单位
-         */
+        /// <summary>
+        /// 骑兵
+        /// </summary>
         public bool Horseback;
 
-        /**
-         * 重甲单位
-         */
+        /// <summary>
+        /// 重甲
+        /// </summary>
         public bool Armored;
 
-        /**
-         * 魔法单位
-         */
+        /// <summary>
+        /// 魔法
+        /// </summary>
         public bool Magical;
 
-        /**
-         * 龙单位
-         */
+        /// <summary>
+        /// 龙
+        /// </summary>
         public bool Dragon;
 
-        /**
-         * 武器列表
-         */
+        /// <summary>
+        /// 武器列表
+        /// </summary>
         public List<ScriptableWeaponControl> Controls;
 
-        /**
-         * 能力列表
-         */
+        /// <summary>
+        /// 能力列表
+        /// </summary>
         public List<ScriptableEffect> Abilities;
+
+        /// <summary>
+        /// 限制列表
+        /// </summary>
+        public List<ScriptableRestriction> Restrictions;
     }
 }

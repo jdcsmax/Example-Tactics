@@ -7,11 +7,12 @@ namespace Zinnor.Tactics.Navigation
 {
     public static class NavUtils
     {
-        /**
-         * 获取 current 四周有效的邻近 Tile
-         */
+        /// <summary>
+        /// 获取 current 四周有效的邻近 Tile
+        /// </summary>
         public static void GetNeighbors(Unit unit, TileOverlay current,
-            Dictionary<Vector2Int, TileOverlay> searchableTiles, List<TileOverlay> neighborTiles)
+            IReadOnlyDictionary<Vector2Int, TileOverlay> searchableTiles,
+            ICollection<TileOverlay> neighborTiles)
         {
             neighborTiles.Clear();
 
@@ -54,7 +55,7 @@ namespace Zinnor.Tactics.Navigation
 
         public static void GetNeighbors(TileOverlay current,
             IReadOnlyDictionary<Vector2Int, TileOverlay> searchableTiles,
-            List<TileOverlay> neighborTiles)
+            ICollection<TileOverlay> neighborTiles)
         {
             neighborTiles.Clear();
 
@@ -87,7 +88,7 @@ namespace Zinnor.Tactics.Navigation
         }
 
         /// <summary>
-        /// 返回 Tile 之间的曼哈顿距离
+        /// 返回格子之间的曼哈顿距离
         /// </summary>
         public static int GetManhattenDistance(TileOverlay tile, TileOverlay neighbor)
         {
@@ -95,12 +96,9 @@ namespace Zinnor.Tactics.Navigation
                    Mathf.Abs(tile.Location3D.y - neighbor.Location3D.y);
         }
 
-        public static int GetManhattenDistance(Vector3Int position, Vector3Int neighbor)
-        {
-            return Mathf.Abs(position.x - neighbor.x) +
-                   Mathf.Abs(position.y - neighbor.y);
-        }
-
+        /// <summary>
+        /// 返回两点之间的曼哈顿距离
+        /// </summary>
         public static int GetManhattenDistance(Vector2Int position, Vector2Int neighbor)
         {
             return Mathf.Abs(position.x - neighbor.x) +

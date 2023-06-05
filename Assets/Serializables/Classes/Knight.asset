@@ -30,3 +30,8 @@ MonoBehaviour:
   Controls:
   - {fileID: 11400000, guid: 6c46ee7a9e240594fb64fe32aad50fd3, type: 2}
   Abilities: []
+  Restrictions:
+  - {fileID: 11400000, guid: 61222050435d78b4c84c937a5f679db6, type: 2}
+  - {fileID: 11400000, guid: 35662ef0aa4556b4c89f1e641d79500c, type: 2}
+  - {fileID: 11400000, guid: 2eba5e660405f9546929d7577e4f2c9a, type: 2}
+  - {fileID: 11400000, guid: 64fa277bc773ac542824c29b60e31389, type: 2}
