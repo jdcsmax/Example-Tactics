@@ -91,13 +91,8 @@ namespace Zinnor.Tactics.Navigation
 
                 NavUtils.GetNeighbors(current, searchableTiles, neighborTiles);
 
-                foreach (var neighbor in neighborTiles)
+                foreach (var neighbor in neighborTiles.Where(n => !n.Visited))
                 {
-                    if (neighbor.Visited)
-                    {
-                        continue;
-                    }
-
                     if (neighbor.C != int.MaxValue && current.C + neighbor.W >= neighbor.C)
                     {
                         continue;
@@ -135,7 +130,7 @@ namespace Zinnor.Tactics.Navigation
         {
             var curr = end;
 
-            while (curr.Previous != null)
+            while (curr.Previous)
             {
                 shortestPath.Add(curr.Previous);
 

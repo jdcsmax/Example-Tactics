@@ -198,7 +198,7 @@ namespace Zinnor.Tactics.Units
         public int MoveCost(TileOverlay tile)
         {
             var restriction = Class.Restrictions.FirstOrDefault(
-                r => tile.OverlayData == r.OverlayData);
+                restriction => tile.OverlayData == restriction.OverlayData);
             return restriction != null ? restriction.MoveCost : 1;
         }
 

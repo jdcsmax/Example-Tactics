@@ -31,7 +31,6 @@ namespace Zinnor.Tactics.Controllers
         public Unit ActiveUnit;
 
         #region Test
-
         public TileOverlayController TileOverlayController;
         public int UnitId;
         public GameObject UnitContainer;
@@ -39,13 +38,23 @@ namespace Zinnor.Tactics.Controllers
         public ScriptableWeapon UnitWeapon;
         #endregion
 
-        public void Start()
+        private void Awake()
         {
-            DoBuildMap();
-            
-            TestMovementSquares().Forget();
+            BuildMap();
         }
 
+        private void Start()
+        {
+            TestMovementSquares().Forget();
+        }
+        
+        public TileOverlay GetOverlayTileByWorldPosition(Vector3 worldPosition)
+        {
+            var cellPos = TileGround.WorldToCell(worldPosition);
+            var tilePos = new Vector2Int(cellPos.x, cellPos.y);
+            return TileOverlayMap.TryGetValue(tilePos, out var tile) ? tile : null;
+        }
+        
         private async UniTask TestMovementSquares()
         {
             var location = new Vector2Int(-10, -8);
@@ -95,7 +104,7 @@ namespace Zinnor.Tactics.Controllers
             ActiveUnit.AfterPropertySet();
         }
 
-        private void DoBuildMap()
+        private void BuildMap()
         {
             Logger.Info("Starting build map ...");
 
